@@ -1,0 +1,30 @@
+import type { Hono } from "hono";
+import type { HttpBindings } from "@hono/node-server";
+import { serveStatic } from "@hono/node-server/serve-static";
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const distPath = path.resolve(__dirname, "../../dist/public");
+
+type App = Hono<{ Bindings: HttpBindings }>;
+
+export function serveStaticFiles(app: App) {
+  // Serve static files from dist/public
+  app.use("*", serveStatic({ root: path.relative(process.cwd(), distPath) }));
+
+  // SPA fallback - serve index.html for all non-API routes
+  app.notFound((c) => {
+    const accept = c.req.header("accept") ?? "";
+    if (!accept.includes("text/html")) {
+      return c.json({ error: "Not Found" }, 404);
+    }
+    const indexPath = path.resolve(distPath, "index.html");
+    if (fs.existsSync(indexPath)) {
+      const content = fs.readFileSync(indexPath, "utf-8");
+      return c.html(content);
+    }
+    return c.json({ error: "Not Found" }, 404);
+  });
+}
