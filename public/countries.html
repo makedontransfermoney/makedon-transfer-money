@@ -1,0 +1,2086 @@
+<!DOCTYPE html>
+<html lang="mk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Makedon Transfer Money - 195 Земји за Трансфер на Пари</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif}
+:root{--red:#d32f2f;--red-dark:#b71c1c;--yellow:#ffd600;--gold:#ff8f00;--dark:#0f0f1a;--card:#1a1a2e}
+body{background:var(--dark);color:#fff;min-height:100vh}
+.header{background:linear-gradient(135deg,var(--red),var(--red-dark));padding:30px 20px;text-align:center;border-bottom:4px solid var(--yellow)}
+.header h1{font-size:2.2em;font-weight:900;text-shadow:2px 2px 4px rgba(0,0,0,.5)}
+.header h1 span{color:var(--yellow)}.header p{font-size:1.1em;margin-top:10px;opacity:.95}
+.stats{display:flex;justify-content:center;gap:40px;margin-top:20px;flex-wrap:wrap}
+.stat{text-align:center}.stat-number{font-size:2.5em;font-weight:900;color:var(--yellow)}.stat-label{font-size:.9em;text-transform:uppercase;letter-spacing:1px}
+.controls{background:rgba(255,255,255,.05);padding:20px;backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,255,255,.1);position:sticky;top:0;z-index:100;display:flex;gap:15px;flex-wrap:wrap;align-items:center;justify-content:center}
+.search-box{flex:1;min-width:250px;max-width:400px}
+.search-box input{width:100%;padding:14px 20px;border:2px solid rgba(255,255,255,.2);border-radius:50px;background:rgba(255,255,255,.1);color:#fff;font-size:1em;outline:none;transition:all .3s}
+.search-box input:focus{border-color:var(--yellow);background:rgba(255,255,255,.15)}
+.search-box input::placeholder{color:rgba(255,255,255,.5)}
+.filter-buttons{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.filter-btn{padding:10px 20px;border:2px solid rgba(255,255,255,.2);border-radius:25px;background:transparent;color:#fff;cursor:pointer;transition:all .3s;font-size:.9em;font-weight:600}
+.filter-btn:hover,.filter-btn.active{background:var(--yellow);color:var(--dark);border-color:var(--yellow)}
+.container{max-width:1400px;margin:0 auto;padding:30px 20px}
+.continent-section{margin-bottom:40px}.continent-header{display:flex;align-items:center;gap:15px;margin-bottom:20px;padding-bottom:15px;border-bottom:2px solid rgba(255,255,255,.1)}
+.continent-header h2{font-size:1.5em;color:var(--yellow)}.continent-count{background:rgba(255,255,255,.1);padding:5px 15px;border-radius:20px;font-size:.8em}
+.countries-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:20px;margin-bottom:40px}
+.country-card{background:var(--card);border-radius:16px;padding:20px;border:1px solid rgba(255,255,255,.1);transition:all .3s;position:relative;overflow:hidden}
+.country-card:hover{transform:translateY(-5px);border-color:var(--yellow);box-shadow:0 10px 40px rgba(255,214,0,.15)}
+.country-card::after{content:"";position:absolute;top:0;right:0;width:80px;height:80px;background:linear-gradient(135deg,transparent 50%,rgba(255,214,0,.1) 50%);border-radius:0 0 0 80px}
+.country-header{display:flex;align-items:center;gap:15px;margin-bottom:15px}
+.flag{width:60px;height:40px;border-radius:8px;font-size:30px;display:flex;align-items:center;justify-content:center;border:2px solid rgba(255,255,255,.2)}
+.country-name h3{font-size:1.2em;color:#fff;margin-bottom:3px}.country-name span{font-size:.8em;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:1px}
+.country-meta{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:15px;font-size:.85em}
+.meta-item{display:flex;flex-direction:column;padding:8px 10px;background:rgba(255,255,255,.05);border-radius:8px}
+.meta-label{color:rgba(255,255,255,.5);font-size:.72em;text-transform:uppercase;letter-spacing:1px}.meta-value{color:#fff;font-weight:600;font-size:.9em}
+.meta-item.full-width{grid-column:1/-1}
+.footer{text-align:center;padding:40px 20px;background:rgba(255,255,255,.03);border-top:1px solid rgba(255,255,255,.1);margin-top:60px}
+.footer h3{color:var(--yellow);font-size:1.3em;margin-bottom:10px}.footer p{opacity:.6;font-size:.9em}
+@media(max-width:768px){.header h1{font-size:1.5em}.stats{gap:20px}.stat-number{font-size:1.8em}.countries-grid{grid-template-columns:1fr}}
+::-webkit-scrollbar{width:8px}::-webkit-scrollbar-track{background:var(--dark)}::-webkit-scrollbar-thumb{background:var(--yellow);border-radius:4px}
+</style>
+</head>
+<body>
+<div class="header">
+  <h1><span>MAKEDON</span> TRANSFER MONEY</h1>
+  <p>195 Земји за Инстант Трансфер на Пари со 1% Провизија</p>
+  <div class="stats">
+    <div class="stat"><div class="stat-number">195</div><div class="stat-label">Земји</div></div>
+    <div class="stat"><div class="stat-number">6</div><div class="stat-label">Континенти</div></div>
+    <div class="stat"><div class="stat-number">150+</div><div class="stat-label">Валути</div></div>
+    <div class="stat"><div class="stat-number">1%</div><div class="stat-label">Провизија</div></div>
+  </div>
+</div>
+<div class="controls">
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="Пребарај земја..." oninput="filterCountries()">
+  </div>
+  <div class="filter-buttons">
+    <button class="filter-btn active" onclick="filterByContinent('all',this)">Сите</button>
+    <button class="filter-btn" onclick="filterByContinent('Europe',this)">Европа</button>
+    <button class="filter-btn" onclick="filterByContinent('Asia',this)">Азија</button>
+    <button class="filter-btn" onclick="filterByContinent('Africa',this)">Африка</button>
+    <button class="filter-btn" onclick="filterByContinent('North America',this)">С. Америка</button>
+    <button class="filter-btn" onclick="filterByContinent('South America',this)">Ј. Америка</button>
+    <button class="filter-btn" onclick="filterByContinent('Oceania',this)">Океанија</button>
+  </div>
+</div>
+<div class="container" id="countriesContainer">
+<div class="continent-section" data-continent="Europe">
+<div class="continent-header"><h2>Европа</h2><span class="continent-count">46 земји</span></div>
+<div class="countries-grid">
+<div class="country-card" data-name="Северна Македонија" data-code="MK" data-continent="Europe">
+<div class="country-header"><span class="flag">🇲🇰</span><div class="country-name"><h3>Северна Македонија</h3><span>MK &bull; Скопје</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">ден MKD</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+389</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">1.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">македонски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">MK07 3000 0000 0042 527</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Албанија" data-code="AL" data-continent="Europe">
+<div class="country-header"><span class="flag">🇦🇱</span><div class="country-name"><h3>Албанија</h3><span>AL &bull; Тирана</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">L ALL</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+355</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">500K</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">албански</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">AL47 2121 1009 0000 0002 3569 8741</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Србија" data-code="RS" data-continent="Europe">
+<div class="country-header"><span class="flag">🇷🇸</span><div class="country-name"><h3>Србија</h3><span>RS &bull; Белград</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">дин. RSD</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+381</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">800K</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">српски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">RS35 2600 0560 1001 6113 79</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Црна Гора" data-code="ME" data-continent="Europe">
+<div class="country-header"><span class="flag">🇲🇪</span><div class="country-name"><h3>Црна Гора</h3><span>ME &bull; Подгорица</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">€ EUR</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+382</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">500K</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">црногорски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">ME25 5050 0001 2345 6789 51</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Босна и Херцеговина" data-code="BA" data-continent="Europe">
+<div class="country-header"><span class="flag">🇧🇦</span><div class="country-name"><h3>Босна и Херцеговина</h3><span>BA &bull; Сараево</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">KM BAM</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+387</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">400K</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">босански</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">BA39 1290 0794 0102 8494</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Хрватска" data-code="HR" data-continent="Europe">
+<div class="country-header"><span class="flag">🇭🇷</span><div class="country-name"><h3>Хрватска</h3><span>HR &bull; Загреб</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">€ EUR</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+385</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">1.5M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">хрватски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">HR12 1001 0051 8630 0016 0</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Словенија" data-code="SI" data-continent="Europe">
+<div class="country-header"><span class="flag">🇸🇮</span><div class="country-name"><h3>Словенија</h3><span>SI &bull; Љубљана</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">€ EUR</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+386</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">2.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">словенечки</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">SI56 1910 0000 0123 438</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Бугарија" data-code="BG" data-continent="Europe">
+<div class="country-header"><span class="flag">🇧🇬</span><div class="country-name"><h3>Бугарија</h3><span>BG &bull; Софија</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">лв BGN</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+359</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">1.5M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">бугарски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">BG80 BNBG 9661 1020 3456 78</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Романија" data-code="RO" data-continent="Europe">
+<div class="country-header"><span class="flag">🇷🇴</span><div class="country-name"><h3>Романија</h3><span>RO &bull; Букурешт</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">lei RON</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+40</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">2.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">романски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">RO49 AAAA 1B31 0075 9384 0000</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Грција" data-code="GR" data-continent="Europe">
+<div class="country-header"><span class="flag">🇬🇷</span><div class="country-name"><h3>Грција</h3><span>GR &bull; Атина</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">€ EUR</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+30</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">2.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">грчки</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">GR16 0110 1250 0000 0001 2300 695</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Турција" data-code="TR" data-continent="Europe">
+<div class="country-header"><span class="flag">🇹🇷</span><div class="country-name"><h3>Турција</h3><span>TR &bull; Анкара</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">₺ TRY</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+90</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">1.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">турски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">TR33 0006 1005 1978 6457 8413 26</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Германија" data-code="DE" data-continent="Europe">
+<div class="country-header"><span class="flag">🇩🇪</span><div class="country-name"><h3>Германија</h3><span>DE &bull; Берлин</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">€ EUR</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+49</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">10.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">германски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">DE89 3704 0044 0532 0130 00</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Франција" data-code="FR" data-continent="Europe">
+<div class="country-header"><span class="flag">🇫🇷</span><div class="country-name"><h3>Франција</h3><span>FR &bull; Париз</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">€ EUR</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+33</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">10.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">француски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">FR14 2004 1010 0505 0001 3M02 606</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Италија" data-code="IT" data-continent="Europe">
+<div class="country-header"><span class="flag">🇮🇹</span><div class="country-name"><h3>Италија</h3><span>IT &bull; Рим</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">€ EUR</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+39</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">10.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">италијански</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">IT60 X054 2811 1010 0000 0123 456</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Шпанија" data-code="ES" data-continent="Europe">
+<div class="country-header"><span class="flag">🇪🇸</span><div class="country-name"><h3>Шпанија</h3><span>ES &bull; Мадрид</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">€ EUR</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+34</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">10.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">шпански</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">ES91 2100 0418 4502 0005 1332</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Португалија" data-code="PT" data-continent="Europe">
+<div class="country-header"><span class="flag">🇵🇹</span><div class="country-name"><h3>Португалија</h3><span>PT &bull; Лисабон</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">€ EUR</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+351</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">8.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">португалски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">PT50 0002 0123 1234 5678 9015 4</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Холандија" data-code="NL" data-continent="Europe">
+<div class="country-header"><span class="flag">🇳🇱</span><div class="country-name"><h3>Холандија</h3><span>NL &bull; Амстердам</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">€ EUR</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+31</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">10.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">холандски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">NL91 ABNA 0417 1643 00</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Белгија" data-code="BE" data-continent="Europe">
+<div class="country-header"><span class="flag">🇧🇪</span><div class="country-name"><h3>Белгија</h3><span>BE &bull; Брисел</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">€ EUR</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+32</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">10.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">холандски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">BE68 5390 0754 7034</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Австрија" data-code="AT" data-continent="Europe">
+<div class="country-header"><span class="flag">🇦🇹</span><div class="country-name"><h3>Австрија</h3><span>AT &bull; Виена</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">€ EUR</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+43</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">8.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">германски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">AT61 1904 3002 3457 3201</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Швајцарија" data-code="CH" data-continent="Europe">
+<div class="country-header"><span class="flag">🇨🇭</span><div class="country-name"><h3>Швајцарија</h3><span>CH &bull; Берн</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">Fr. CHF</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+41</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">15.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">германски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">CH93 0076 2011 6238 5295 7</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Велика Британија" data-code="GB" data-continent="Europe">
+<div class="country-header"><span class="flag">🇬🇧</span><div class="country-name"><h3>Велика Британија</h3><span>GB &bull; Лондон</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">£ GBP</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+44</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">20.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">англиски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">GB29 NWBK 6016 1331 9268 19</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Ирска" data-code="IE" data-continent="Europe">
+<div class="country-header"><span class="flag">🇮🇪</span><div class="country-name"><h3>Ирска</h3><span>IE &bull; Даблин</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">€ EUR</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+353</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">10.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">ирски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">IE29 AIBK 9311 5212 3456 78</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Шведска" data-code="SE" data-continent="Europe">
+<div class="country-header"><span class="flag">🇸🇪</span><div class="country-name"><h3>Шведска</h3><span>SE &bull; Стокхолм</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">kr SEK</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+46</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">10.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">шведски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">SE45 5000 0000 0583 9825 7466</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Норвешка" data-code="NO" data-continent="Europe">
+<div class="country-header"><span class="flag">🇳🇴</span><div class="country-name"><h3>Норвешка</h3><span>NO &bull; Осло</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">kr NOK</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+47</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">10.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">норвешки</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">NO93 8601 1117 947</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Данска" data-code="DK" data-continent="Europe">
+<div class="country-header"><span class="flag">🇩🇰</span><div class="country-name"><h3>Данска</h3><span>DK &bull; Копенхаген</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">kr DKK</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+45</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">10.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">дански</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">DK50 0040 0440 1162 43</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Финска" data-code="FI" data-continent="Europe">
+<div class="country-header"><span class="flag">🇫🇮</span><div class="country-name"><h3>Финска</h3><span>FI &bull; Хелсинки</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">€ EUR</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+358</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">10.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">фински</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">FI21 1234 5600 0007 85</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Полска" data-code="PL" data-continent="Europe">
+<div class="country-header"><span class="flag">🇵🇱</span><div class="country-name"><h3>Полска</h3><span>PL &bull; Варшава</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">zł PLN</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+48</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">5.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">полски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">PL61 1090 1014 0000 0712 1981 2874</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Чешка" data-code="CZ" data-continent="Europe">
+<div class="country-header"><span class="flag">🇨🇿</span><div class="country-name"><h3>Чешка</h3><span>CZ &bull; Прага</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">Kč CZK</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+420</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">5.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">чешки</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">CZ65 0800 0000 1920 0014 5399</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Словачка" data-code="SK" data-continent="Europe">
+<div class="country-header"><span class="flag">🇸🇰</span><div class="country-name"><h3>Словачка</h3><span>SK &bull; Братислава</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">€ EUR</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+421</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">5.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">словачки</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">SK31 1200 0000 1987 4263 7541</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Унгарија" data-code="HU" data-continent="Europe">
+<div class="country-header"><span class="flag">🇭🇺</span><div class="country-name"><h3>Унгарија</h3><span>HU &bull; Будимпешта</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">Ft HUF</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+36</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">5.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">унгарски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">HU42 1177 3016 1111 1018 0000 0000</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Литванија" data-code="LT" data-continent="Europe">
+<div class="country-header"><span class="flag">🇱🇹</span><div class="country-name"><h3>Литванија</h3><span>LT &bull; Вилнус</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">€ EUR</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+370</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">5.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">литвански</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">LT12 1000 0111 0100 1000</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Латвија" data-code="LV" data-continent="Europe">
+<div class="country-header"><span class="flag">🇱🇻</span><div class="country-name"><h3>Латвија</h3><span>LV &bull; Рига</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">€ EUR</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+371</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">5.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">латвиски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">LV80 BANK 0000 4351 9500 1</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Естонија" data-code="EE" data-continent="Europe">
+<div class="country-header"><span class="flag">🇪🇪</span><div class="country-name"><h3>Естонија</h3><span>EE &bull; Талин</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">€ EUR</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+372</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">5.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">естонски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">EE38 2200 2210 2014 5685</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Украина" data-code="UA" data-continent="Europe">
+<div class="country-header"><span class="flag">🇺🇦</span><div class="country-name"><h3>Украина</h3><span>UA &bull; Киев</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">₴ UAH</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+380</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">1.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">украински</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">UA21 3996 2200 0002 6007 2335 6600 1</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Молдавија" data-code="MD" data-continent="Europe">
+<div class="country-header"><span class="flag">🇲🇩</span><div class="country-name"><h3>Молдавија</h3><span>MD &bull; Кишинев</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">L MDL</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+373</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">500K</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">молдавски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">MD24 AG00 0225 1000 1310 4168</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Белорусија" data-code="BY" data-continent="Europe">
+<div class="country-header"><span class="flag">🇧🇾</span><div class="country-name"><h3>Белорусија</h3><span>BY &bull; Минск</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">Br BYN</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+375</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">500K</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">белоруски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">BY13 NBRB 3600 9000 0000 2Z00 AB00</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Русија" data-code="RU" data-continent="Europe">
+<div class="country-header"><span class="flag">🇷🇺</span><div class="country-name"><h3>Русија</h3><span>RU &bull; Москва</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">₽ RUB</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+7</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">2.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">руски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">RU17 0445 2560 0401 2D05 0530 1963 1010</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Косово" data-code="XK" data-continent="Europe">
+<div class="country-header"><span class="flag">🇽🇰</span><div class="country-name"><h3>Косово</h3><span>XK &bull; Приштина</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">€ EUR</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+383</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">300K</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">албански</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">XK05 1212 0123 4567 8901 23</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Кипар" data-code="CY" data-continent="Europe">
+<div class="country-header"><span class="flag">🇨🇾</span><div class="country-name"><h3>Кипар</h3><span>CY &bull; Никозија</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">€ EUR</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+357</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">3.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">грчки</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">CY17 0020 0128 0000 0012 0052 7600</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Малта" data-code="MT" data-continent="Europe">
+<div class="country-header"><span class="flag">🇲🇹</span><div class="country-name"><h3>Малта</h3><span>MT &bull; Валета</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">€ EUR</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+356</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">3.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">малтешки</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">MT84 MALT 0110 0001 2345 MTLC AST0</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Исланд" data-code="IS" data-continent="Europe">
+<div class="country-header"><span class="flag">🇮🇸</span><div class="country-name"><h3>Исланд</h3><span>IS &bull; Рејкјавик</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">kr ISK</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+354</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">5.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">исландски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">IS14 0159 2600 7654 5510 7303 39</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Лихтенштајн" data-code="LI" data-continent="Europe">
+<div class="country-header"><span class="flag">🇱🇮</span><div class="country-name"><h3>Лихтенштајн</h3><span>LI &bull; Вадуц</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">Fr. CHF</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+423</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">10.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">германски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">LI21 0881 0000 2324 013A A</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Монако" data-code="MC" data-continent="Europe">
+<div class="country-header"><span class="flag">🇲🇨</span><div class="country-name"><h3>Монако</h3><span>MC &bull; Монако</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">€ EUR</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+377</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">10.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">француски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">MC93 2005 2222 1001 1223 3M44 300</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Сан Марино" data-code="SM" data-continent="Europe">
+<div class="country-header"><span class="flag">🇸🇲</span><div class="country-name"><h3>Сан Марино</h3><span>SM &bull; Сан Марино</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">€ EUR</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+378</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">2.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">италијански</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">SM86 U032 2509 8000 0000 0270 100</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Андора" data-code="AD" data-continent="Europe">
+<div class="country-header"><span class="flag">🇦🇩</span><div class="country-name"><h3>Андора</h3><span>AD &bull; Андора ла Веља</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">€ EUR</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+376</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">1.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">каталонски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">AD12 0001 2030 2003 5910 0100</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Луксембург" data-code="LU" data-continent="Europe">
+<div class="country-header"><span class="flag">🇱🇺</span><div class="country-name"><h3>Луксембург</h3><span>LU &bull; Луксембург</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">€ EUR</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+352</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">20.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">луксембуршки</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">LU28 0019 4006 4475 0000</span></div>
+</div>
+</div>
+</div></div>
+<div class="continent-section" data-continent="Asia">
+<div class="continent-header"><h2>Азија</h2><span class="continent-count">46 земји</span></div>
+<div class="countries-grid">
+<div class="country-card" data-name="Авганистан" data-code="AF" data-continent="Asia">
+<div class="country-header"><span class="flag">🇦🇫</span><div class="country-name"><h3>Авганистан</h3><span>AF &bull; Кабул</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">؋ AFN</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+93</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">200K</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">пашто</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">AF02 DABR 0000 0000 0100 1005 001</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Ерменија" data-code="AM" data-continent="Asia">
+<div class="country-header"><span class="flag">🇦🇲</span><div class="country-name"><h3>Ерменија</h3><span>AM &bull; Ереван</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">Դ AMD</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+374</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">500K</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">ерменски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">AM93 0001 2032 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Азербејџан" data-code="AZ" data-continent="Asia">
+<div class="country-header"><span class="flag">🇦🇿</span><div class="country-name"><h3>Азербејџан</h3><span>AZ &bull; Баку</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">₼ AZN</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+994</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">1.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">азербејџански</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">AZ21 NABZ 0000 0000 1370 1000 1944</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Бахреин" data-code="BH" data-continent="Asia">
+<div class="country-header"><span class="flag">🇧🇭</span><div class="country-name"><h3>Бахреин</h3><span>BH &bull; Манама</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">.د.ب BHD</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+973</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">2.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">арапски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">BH67 BMAG 0000 1299 1234 56</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Бангладеш" data-code="BD" data-continent="Asia">
+<div class="country-header"><span class="flag">🇧🇩</span><div class="country-name"><h3>Бангладеш</h3><span>BD &bull; Дака</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">৳ BDT</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+880</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">500K</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">бенгалски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">BD13 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Бутан" data-code="BT" data-continent="Asia">
+<div class="country-header"><span class="flag">🇧🇹</span><div class="country-name"><h3>Бутан</h3><span>BT &bull; Тхимпу</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">Nu. BTN</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+975</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">300K</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">џонгка</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">BT06 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Брунеи" data-code="BN" data-continent="Asia">
+<div class="country-header"><span class="flag">🇧🇳</span><div class="country-name"><h3>Брунеи</h3><span>BN &bull; Бандар Сери Бегаван</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">$ BND</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+673</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">3.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">малајски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">BN02 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Камбоџа" data-code="KH" data-continent="Asia">
+<div class="country-header"><span class="flag">🇰🇭</span><div class="country-name"><h3>Камбоџа</h3><span>KH &bull; Пном Пен</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">៛ KHR</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+855</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">500K</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">кмерски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">KH02 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Кина" data-code="CN" data-continent="Asia">
+<div class="country-header"><span class="flag">🇨🇳</span><div class="country-name"><h3>Кина</h3><span>CN &bull; Пекинг</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">¥ CNY</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+86</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">50.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">кинески</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">CN92 ABCQ 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Грузија" data-code="GE" data-continent="Asia">
+<div class="country-header"><span class="flag">🇬🇪</span><div class="country-name"><h3>Грузија</h3><span>GE &bull; Тбилиси</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">₾ GEL</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+995</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">800K</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">грузиски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">GE29 NB00 0000 0101 9049 17</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Индија" data-code="IN" data-continent="Asia">
+<div class="country-header"><span class="flag">🇮🇳</span><div class="country-name"><h3>Индија</h3><span>IN &bull; Нов Делхи</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">₹ INR</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+91</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">5.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">хинди</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">INDB 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Индонезија" data-code="ID" data-continent="Asia">
+<div class="country-header"><span class="flag">🇮🇩</span><div class="country-name"><h3>Индонезија</h3><span>ID &bull; Џакарта</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">Rp IDR</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+62</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">2.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">индонезиски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">ID23 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Иран" data-code="IR" data-continent="Asia">
+<div class="country-header"><span class="flag">🇮🇷</span><div class="country-name"><h3>Иран</h3><span>IR &bull; Техеран</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">﷼ IRR</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+98</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">500K</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">персиски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">IR12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Ирак" data-code="IQ" data-continent="Asia">
+<div class="country-header"><span class="flag">🇮🇶</span><div class="country-name"><h3>Ирак</h3><span>IQ &bull; Багдад</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">ع.د IQD</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+964</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">1.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">арапски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">IQ98 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Израел" data-code="IL" data-continent="Asia">
+<div class="country-header"><span class="flag">🇮🇱</span><div class="country-name"><h3>Израел</h3><span>IL &bull; Ерусалим</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">₪ ILS</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+972</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">500K</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">хебрејски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">IL62 0108 0000 0009 9999 999</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Јапонија" data-code="JP" data-continent="Asia">
+<div class="country-header"><span class="flag">🇯🇵</span><div class="country-name"><h3>Јапонија</h3><span>JP &bull; Токио</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">¥ JPY</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+81</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">50.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">јапонски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">JP92 MHBK 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Јордан" data-code="JO" data-continent="Asia">
+<div class="country-header"><span class="flag">🇯🇴</span><div class="country-name"><h3>Јордан</h3><span>JO &bull; Аман</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">د.ا JOD</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+962</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">2.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">арапски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">JO94 CBJO 0010 0000 0000 0131 0003 4567</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Казахстан" data-code="KZ" data-continent="Asia">
+<div class="country-header"><span class="flag">🇰🇿</span><div class="country-name"><h3>Казахстан</h3><span>KZ &bull; Астана</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">₸ KZT</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+7</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">3.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">казашки</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">KZ86 125K Z500 1300 0000</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Кувајт" data-code="KW" data-continent="Asia">
+<div class="country-header"><span class="flag">🇰🇼</span><div class="country-name"><h3>Кувајт</h3><span>KW &bull; Кувајт</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">د.ك KWD</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+965</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">5.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">арапски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">KW81 CBKU 0000 0000 0000 1234 5601 01</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Киргистан" data-code="KG" data-continent="Asia">
+<div class="country-header"><span class="flag">🇰🇬</span><div class="country-name"><h3>Киргистан</h3><span>KG &bull; Бишкек</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">с KGS</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+996</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">300K</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">киргиски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">KG00 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Лаос" data-code="LA" data-continent="Asia">
+<div class="country-header"><span class="flag">🇱🇦</span><div class="country-name"><h3>Лаос</h3><span>LA &bull; Виентијан</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">₭ LAK</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+856</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">500K</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">лаоски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">LA92 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Либан" data-code="LB" data-continent="Asia">
+<div class="country-header"><span class="flag">🇱🇧</span><div class="country-name"><h3>Либан</h3><span>LB &bull; Бејрут</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">ل.ل LBP</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+961</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">1.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">арапски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">LB62 0990 0000 0001 0019 0122 9114</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Малезија" data-code="MY" data-continent="Asia">
+<div class="country-header"><span class="flag">🇲🇾</span><div class="country-name"><h3>Малезија</h3><span>MY &bull; Куала Лумпур</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">RM MYR</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+60</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">5.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">малајски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">MY66 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Малдиви" data-code="MV" data-continent="Asia">
+<div class="country-header"><span class="flag">🇲🇻</span><div class="country-name"><h3>Малдиви</h3><span>MV &bull; Мале</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">.ރ MVR</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+960</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">1.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">дивехи</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">MV12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Монголија" data-code="MN" data-continent="Asia">
+<div class="country-header"><span class="flag">🇲🇳</span><div class="country-name"><h3>Монголија</h3><span>MN &bull; Улан Батор</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">₮ MNT</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+976</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">500K</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">монголски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">MN12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Мјанмар" data-code="MM" data-continent="Asia">
+<div class="country-header"><span class="flag">🇲🇲</span><div class="country-name"><h3>Мјанмар</h3><span>MM &bull; Најпјидо</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">Ks MMK</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+95</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">500K</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">бурмански</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">MM12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Непал" data-code="NP" data-continent="Asia">
+<div class="country-header"><span class="flag">🇳🇵</span><div class="country-name"><h3>Непал</h3><span>NP &bull; Катманду</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">₨ NPR</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+977</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">500K</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">непалски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">NP12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Северна Кореја" data-code="KP" data-continent="Asia">
+<div class="country-header"><span class="flag">🇰🇵</span><div class="country-name"><h3>Северна Кореја</h3><span>KP &bull; Пјонгјанг</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">₩ KPW</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+850</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">50K</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">корејски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">KP12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Оман" data-code="OM" data-continent="Asia">
+<div class="country-header"><span class="flag">🇴🇲</span><div class="country-name"><h3>Оман</h3><span>OM &bull; Мускат</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">ر.ع. OMR</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+968</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">3.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">арапски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">OM12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Пакистан" data-code="PK" data-continent="Asia">
+<div class="country-header"><span class="flag">🇵🇰</span><div class="country-name"><h3>Пакистан</h3><span>PK &bull; Исламабад</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">₨ PKR</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+92</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">2.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">урду</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">PK12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Филипини" data-code="PH" data-continent="Asia">
+<div class="country-header"><span class="flag">🇵🇭</span><div class="country-name"><h3>Филипини</h3><span>PH &bull; Манила</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">₱ PHP</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+63</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">3.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">филипински</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">PH12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Катар" data-code="QA" data-continent="Asia">
+<div class="country-header"><span class="flag">🇶🇦</span><div class="country-name"><h3>Катар</h3><span>QA &bull; Доха</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">ر.ق QAR</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+974</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">5.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">арапски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">QA12 DOHB 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Саудиска Арабија" data-code="SA" data-continent="Asia">
+<div class="country-header"><span class="flag">🇸🇦</span><div class="country-name"><h3>Саудиска Арабија</h3><span>SA &bull; Ријад</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">ر.س SAR</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+966</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">10.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">арапски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">SA03 8000 0000 6080 1016 7519</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Сингапур" data-code="SG" data-continent="Asia">
+<div class="country-header"><span class="flag">🇸🇬</span><div class="country-name"><h3>Сингапур</h3><span>SG &bull; Сингапур</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">$ SGD</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+65</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">30.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">англиски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">SG12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Јужна Кореја" data-code="KR" data-continent="Asia">
+<div class="country-header"><span class="flag">🇰🇷</span><div class="country-name"><h3>Јужна Кореја</h3><span>KR &bull; Сеул</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">₩ KRW</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+82</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">30.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">корејски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">KR12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Шри Ланка" data-code="LK" data-continent="Asia">
+<div class="country-header"><span class="flag">🇱🇰</span><div class="country-name"><h3>Шри Ланка</h3><span>LK &bull; Коломбо</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">Rs LKR</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+94</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">1.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">синхалески</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">LK12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Сирија" data-code="SY" data-continent="Asia">
+<div class="country-header"><span class="flag">🇸🇾</span><div class="country-name"><h3>Сирија</h3><span>SY &bull; Дамаск</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">£ SYP</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+963</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">100K</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">арапски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">SY12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Тајван" data-code="TW" data-continent="Asia">
+<div class="country-header"><span class="flag">🇹🇼</span><div class="country-name"><h3>Тајван</h3><span>TW &bull; Тајпеј</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">NT$ TWD</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+886</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">10.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">кинески</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">TW12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Таџикистан" data-code="TJ" data-continent="Asia">
+<div class="country-header"><span class="flag">🇹🇯</span><div class="country-name"><h3>Таџикистан</h3><span>TJ &bull; Душанбе</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">ЅМ TJS</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+992</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">200K</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">таџикистански</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">TJ12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Тајланд" data-code="TH" data-continent="Asia">
+<div class="country-header"><span class="flag">🇹🇭</span><div class="country-name"><h3>Тајланд</h3><span>TH &bull; Бангкок</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">฿ THB</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+66</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">5.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">тајландски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">TH12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Тимор Лесте" data-code="TL" data-continent="Asia">
+<div class="country-header"><span class="flag">🇹🇱</span><div class="country-name"><h3>Тимор Лесте</h3><span>TL &bull; Дили</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">$ USD</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+670</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">500K</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">португалски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">TL12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Туркменистан" data-code="TM" data-continent="Asia">
+<div class="country-header"><span class="flag">🇹🇲</span><div class="country-name"><h3>Туркменистан</h3><span>TM &bull; Ашхабад</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">m TMT</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+993</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">500K</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">туркменски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">TM12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Обединети Арапски Емирати" data-code="AE" data-continent="Asia">
+<div class="country-header"><span class="flag">🇦🇪</span><div class="country-name"><h3>Обединети Арапски Емирати</h3><span>AE &bull; Абу Даби</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">د.إ AED</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+971</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">20.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">арапски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">AE07 0331 2345 6789 0123 456</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Узбекистан" data-code="UZ" data-continent="Asia">
+<div class="country-header"><span class="flag">🇺🇿</span><div class="country-name"><h3>Узбекистан</h3><span>UZ &bull; Ташкент</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">so'm UZS</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+998</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">500K</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">узбечки</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">UZ12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Виетнам" data-code="VN" data-continent="Asia">
+<div class="country-header"><span class="flag">🇻🇳</span><div class="country-name"><h3>Виетнам</h3><span>VN &bull; Ханој</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">₫ VND</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+84</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">2.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">виетнамски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">VN12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Јемен" data-code="YE" data-continent="Asia">
+<div class="country-header"><span class="flag">🇾🇪</span><div class="country-name"><h3>Јемен</h3><span>YE &bull; Сана</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">﷼ YER</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+967</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">500K</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">арапски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">YE12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+</div></div>
+<div class="continent-section" data-continent="Africa">
+<div class="continent-header"><h2>Африка</h2><span class="continent-count">54 земји</span></div>
+<div class="countries-grid">
+<div class="country-card" data-name="Алжир" data-code="DZ" data-continent="Africa">
+<div class="country-header"><span class="flag">🇩🇿</span><div class="country-name"><h3>Алжир</h3><span>DZ &bull; Алжир</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">د.ج DZD</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+213</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">1.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">арапски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">DZ12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Ангола" data-code="AO" data-continent="Africa">
+<div class="country-header"><span class="flag">🇦🇴</span><div class="country-name"><h3>Ангола</h3><span>AO &bull; Луанда</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">Kz AOA</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+244</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">500K</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">португалски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">AO12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Бенин" data-code="BJ" data-continent="Africa">
+<div class="country-header"><span class="flag">🇧🇯</span><div class="country-name"><h3>Бенин</h3><span>BJ &bull; Порто Ново</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">Fr XOF</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+229</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">300K</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">француски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">BJ12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Боцвана" data-code="BW" data-continent="Africa">
+<div class="country-header"><span class="flag">🇧🇼</span><div class="country-name"><h3>Боцвана</h3><span>BW &bull; Габороне</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">P BWP</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+267</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">1.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">англиски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">BW12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Буркина Фасо" data-code="BF" data-continent="Africa">
+<div class="country-header"><span class="flag">🇧🇫</span><div class="country-name"><h3>Буркина Фасо</h3><span>BF &bull; Уагадугу</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">Fr XOF</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+226</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">300K</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">француски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">BF12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Бурунди" data-code="BI" data-continent="Africa">
+<div class="country-header"><span class="flag">🇧🇮</span><div class="country-name"><h3>Бурунди</h3><span>BI &bull; Гитега</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">Fr BIF</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+257</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">200K</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">кирунди</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">BI12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Камерун" data-code="CM" data-continent="Africa">
+<div class="country-header"><span class="flag">🇨🇲</span><div class="country-name"><h3>Камерун</h3><span>CM &bull; Јаунде</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">Fr XAF</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+237</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">500K</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">француски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">CM12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Кабо Верде" data-code="CV" data-continent="Africa">
+<div class="country-header"><span class="flag">🇨🇻</span><div class="country-name"><h3>Кабо Верде</h3><span>CV &bull; Праја</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">$ CVE</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+238</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">300K</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">португалски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">CV12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Централноафриканска Република" data-code="CF" data-continent="Africa">
+<div class="country-header"><span class="flag">🇨🇫</span><div class="country-name"><h3>Централноафриканска Република</h3><span>CF &bull; Банги</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">Fr XAF</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+236</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">200K</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">француски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">CF12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Чад" data-code="TD" data-continent="Africa">
+<div class="country-header"><span class="flag">🇹🇩</span><div class="country-name"><h3>Чад</h3><span>TD &bull; Нџамена</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">Fr XAF</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+235</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">300K</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">арапски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">TD12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Комори" data-code="KM" data-continent="Africa">
+<div class="country-header"><span class="flag">🇰🇲</span><div class="country-name"><h3>Комори</h3><span>KM &bull; Морони</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">Fr KMF</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+269</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">200K</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">арапски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">KM12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="ДР Конго" data-code="CD" data-continent="Africa">
+<div class="country-header"><span class="flag">🇨🇩</span><div class="country-name"><h3>ДР Конго</h3><span>CD &bull; Киншаса</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">Fr CDF</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+243</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">500K</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">француски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">CD12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Конго" data-code="CG" data-continent="Africa">
+<div class="country-header"><span class="flag">🇨🇬</span><div class="country-name"><h3>Конго</h3><span>CG &bull; Бразавил</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">Fr XAF</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+242</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">500K</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">француски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">CG12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Брегот на Слоновата Коска" data-code="CI" data-continent="Africa">
+<div class="country-header"><span class="flag">🇨🇮</span><div class="country-name"><h3>Брегот на Слоновата Коска</h3><span>CI &bull; Јамусукро</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">Fr XOF</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+225</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">500K</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">француски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">CI12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Џибути" data-code="DJ" data-continent="Africa">
+<div class="country-header"><span class="flag">🇩🇯</span><div class="country-name"><h3>Џибути</h3><span>DJ &bull; Џибути</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">Fr DJF</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+253</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">300K</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">арапски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">DJ12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Египет" data-code="EG" data-continent="Africa">
+<div class="country-header"><span class="flag">🇪🇬</span><div class="country-name"><h3>Египет</h3><span>EG &bull; Каиро</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">£ EGP</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+20</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">2.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">арапски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">EG12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Екваторска Гвинеја" data-code="GQ" data-continent="Africa">
+<div class="country-header"><span class="flag">🇬🇶</span><div class="country-name"><h3>Екваторска Гвинеја</h3><span>GQ &bull; Малабо</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">Fr XAF</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+240</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">500K</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">шпански</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">GQ12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Еритреја" data-code="ER" data-continent="Africa">
+<div class="country-header"><span class="flag">🇪🇷</span><div class="country-name"><h3>Еритреја</h3><span>ER &bull; Асмара</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">Nfk ERN</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+291</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">200K</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">тигрински</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">ER12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Есватини" data-code="SZ" data-continent="Africa">
+<div class="country-header"><span class="flag">🇸🇿</span><div class="country-name"><h3>Есватини</h3><span>SZ &bull; Мбабане</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">L SZL</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+268</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">500K</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">свати</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">SZ12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Етиопија" data-code="ET" data-continent="Africa">
+<div class="country-header"><span class="flag">🇪🇹</span><div class="country-name"><h3>Етиопија</h3><span>ET &bull; Адис Абеба</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">Br ETB</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+251</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">1.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">амхарски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">ET12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Габон" data-code="GA" data-continent="Africa">
+<div class="country-header"><span class="flag">🇬🇦</span><div class="country-name"><h3>Габон</h3><span>GA &bull; Либрвил</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">Fr XAF</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+241</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">1.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">француски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">GA12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Гамбија" data-code="GM" data-continent="Africa">
+<div class="country-header"><span class="flag">🇬🇲</span><div class="country-name"><h3>Гамбија</h3><span>GM &bull; Банџул</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">D GMD</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+220</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">300K</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">англиски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">GM12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Гана" data-code="GH" data-continent="Africa">
+<div class="country-header"><span class="flag">🇬🇭</span><div class="country-name"><h3>Гана</h3><span>GH &bull; Акра</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">₵ GHS</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+233</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">1.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">англиски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">GH12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Гвинеја" data-code="GN" data-continent="Africa">
+<div class="country-header"><span class="flag">🇬🇳</span><div class="country-name"><h3>Гвинеја</h3><span>GN &bull; Конакри</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">Fr GNF</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+224</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">300K</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">француски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">GN12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Гвинеја-Бисао" data-code="GW" data-continent="Africa">
+<div class="country-header"><span class="flag">🇬🇼</span><div class="country-name"><h3>Гвинеја-Бисао</h3><span>GW &bull; Бисао</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">Fr XOF</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+245</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">200K</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">португалски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">GW12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Кенија" data-code="KE" data-continent="Africa">
+<div class="country-header"><span class="flag">🇰🇪</span><div class="country-name"><h3>Кенија</h3><span>KE &bull; Најроби</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">Sh KES</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+254</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">2.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">свахили</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">KE12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Лесото" data-code="LS" data-continent="Africa">
+<div class="country-header"><span class="flag">🇱🇸</span><div class="country-name"><h3>Лесото</h3><span>LS &bull; Масеру</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">L LSL</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+266</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">300K</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">сесото</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">LS12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Либерија" data-code="LR" data-continent="Africa">
+<div class="country-header"><span class="flag">🇱🇷</span><div class="country-name"><h3>Либерија</h3><span>LR &bull; Монровија</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">$ LRD</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+231</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">300K</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">англиски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">LR12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Либија" data-code="LY" data-continent="Africa">
+<div class="country-header"><span class="flag">🇱🇾</span><div class="country-name"><h3>Либија</h3><span>LY &bull; Триполи</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">ل.د LYD</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+218</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">1.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">арапски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">LY12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Мадагаскар" data-code="MG" data-continent="Africa">
+<div class="country-header"><span class="flag">🇲🇬</span><div class="country-name"><h3>Мадагаскар</h3><span>MG &bull; Антананариво</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">Ar MGA</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+261</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">500K</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">малгашки</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">MG12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Малави" data-code="MW" data-continent="Africa">
+<div class="country-header"><span class="flag">🇲🇼</span><div class="country-name"><h3>Малави</h3><span>MW &bull; Лилонгве</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">MK MWK</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+265</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">500K</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">англиски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">MW12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Мали" data-code="ML" data-continent="Africa">
+<div class="country-header"><span class="flag">🇲🇱</span><div class="country-name"><h3>Мали</h3><span>ML &bull; Бамако</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">Fr XOF</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+223</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">300K</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">француски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">ML12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Мавританија" data-code="MR" data-continent="Africa">
+<div class="country-header"><span class="flag">🇲🇷</span><div class="country-name"><h3>Мавританија</h3><span>MR &bull; Нуакшот</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">UM MRU</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+222</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">500K</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">арапски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">MR12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Маврициус" data-code="MU" data-continent="Africa">
+<div class="country-header"><span class="flag">🇲🇺</span><div class="country-name"><h3>Маврициус</h3><span>MU &bull; Порт Луис</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">₨ MUR</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+230</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">2.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">англиски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">MU12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Мароко" data-code="MA" data-continent="Africa">
+<div class="country-header"><span class="flag">🇲🇦</span><div class="country-name"><h3>Мароко</h3><span>MA &bull; Рабат</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">د.م. MAD</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+212</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">2.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">арапски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">MA12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Мозамбик" data-code="MZ" data-continent="Africa">
+<div class="country-header"><span class="flag">🇲🇿</span><div class="country-name"><h3>Мозамбик</h3><span>MZ &bull; Мапуто</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">MT MZN</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+258</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">500K</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">португалски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">MZ12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Намибија" data-code="NA" data-continent="Africa">
+<div class="country-header"><span class="flag">🇳🇦</span><div class="country-name"><h3>Намибија</h3><span>NA &bull; Виндхук</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">$ NAD</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+264</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">1.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">англиски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">NA12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Нигер" data-code="NE" data-continent="Africa">
+<div class="country-header"><span class="flag">🇳🇪</span><div class="country-name"><h3>Нигер</h3><span>NE &bull; Ниамеј</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">Fr XOF</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+227</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">300K</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">француски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">NE12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Нигерија" data-code="NG" data-continent="Africa">
+<div class="country-header"><span class="flag">🇳🇬</span><div class="country-name"><h3>Нигерија</h3><span>NG &bull; Абуџа</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">₦ NGN</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+234</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">3.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">англиски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">NG12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Руанда" data-code="RW" data-continent="Africa">
+<div class="country-header"><span class="flag">🇷🇼</span><div class="country-name"><h3>Руанда</h3><span>RW &bull; Кигали</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">Fr RWF</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+250</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">1.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">кинјаруанда</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">RW12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Сао Томе и Принсипе" data-code="ST" data-continent="Africa">
+<div class="country-header"><span class="flag">🇸🇹</span><div class="country-name"><h3>Сао Томе и Принсипе</h3><span>ST &bull; Сао Томе</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">Db STN</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+239</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">200K</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">португалски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">ST12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Сенегал" data-code="SN" data-continent="Africa">
+<div class="country-header"><span class="flag">🇸🇳</span><div class="country-name"><h3>Сенегал</h3><span>SN &bull; Дакар</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">Fr XOF</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+221</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">500K</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">француски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">SN12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Сејшели" data-code="SC" data-continent="Africa">
+<div class="country-header"><span class="flag">🇸🇨</span><div class="country-name"><h3>Сејшели</h3><span>SC &bull; Викторија</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">₨ SCR</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+248</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">1.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">сеселва</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">SC12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Сиера Леоне" data-code="SL" data-continent="Africa">
+<div class="country-header"><span class="flag">🇸🇱</span><div class="country-name"><h3>Сиера Леоне</h3><span>SL &bull; Фритаун</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">Le SLL</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+232</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">300K</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">англиски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">SL12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Сомалија" data-code="SO" data-continent="Africa">
+<div class="country-header"><span class="flag">🇸🇴</span><div class="country-name"><h3>Сомалија</h3><span>SO &bull; Могадишо</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">Sh SOS</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+252</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">200K</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">сомалски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">SO12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Јужна Африка" data-code="ZA" data-continent="Africa">
+<div class="country-header"><span class="flag">🇿🇦</span><div class="country-name"><h3>Јужна Африка</h3><span>ZA &bull; Преторија</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">R ZAR</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+27</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">5.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">зулу</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">ZA12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Јужен Судан" data-code="SS" data-continent="Africa">
+<div class="country-header"><span class="flag">🇸🇸</span><div class="country-name"><h3>Јужен Судан</h3><span>SS &bull; Џуба</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">£ SSP</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+211</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">200K</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">англиски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">SS12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Судан" data-code="SD" data-continent="Africa">
+<div class="country-header"><span class="flag">🇸🇩</span><div class="country-name"><h3>Судан</h3><span>SD &bull; Картум</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">£ SDG</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+249</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">300K</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">арапски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">SD12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Танзанија" data-code="TZ" data-continent="Africa">
+<div class="country-header"><span class="flag">🇹🇿</span><div class="country-name"><h3>Танзанија</h3><span>TZ &bull; Додома</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">Sh TZS</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+255</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">2.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">свахили</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">TZ12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Того" data-code="TG" data-continent="Africa">
+<div class="country-header"><span class="flag">🇹🇬</span><div class="country-name"><h3>Того</h3><span>TG &bull; Ломе</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">Fr XOF</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+228</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">500K</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">француски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">TG12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Тунис" data-code="TN" data-continent="Africa">
+<div class="country-header"><span class="flag">🇹🇳</span><div class="country-name"><h3>Тунис</h3><span>TN &bull; Тунис</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">د.ت TND</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+216</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">1.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">арапски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">TN12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Уганда" data-code="UG" data-continent="Africa">
+<div class="country-header"><span class="flag">🇺🇬</span><div class="country-name"><h3>Уганда</h3><span>UG &bull; Кампала</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">Sh UGX</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+256</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">2.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">англиски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">UG12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Замбија" data-code="ZM" data-continent="Africa">
+<div class="country-header"><span class="flag">🇿🇲</span><div class="country-name"><h3>Замбија</h3><span>ZM &bull; Лусака</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">K ZMW</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+260</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">1.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">англиски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">ZM12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Зимбабве" data-code="ZW" data-continent="Africa">
+<div class="country-header"><span class="flag">🇿🇼</span><div class="country-name"><h3>Зимбабве</h3><span>ZW &bull; Хараре</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">$ ZWL</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+263</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">500K</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">шона</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">ZW12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+</div></div>
+<div class="continent-section" data-continent="North America">
+<div class="continent-header"><h2>Северна Америка</h2><span class="continent-count">23 земји</span></div>
+<div class="countries-grid">
+<div class="country-card" data-name="САД" data-code="US" data-continent="North America">
+<div class="country-header"><span class="flag">🇺🇸</span><div class="country-name"><h3>САД</h3><span>US &bull; Вашингтон</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">$ USD</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+1</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">100.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">англиски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">US64 SVBKUS6S 3300958879 54</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Канада" data-code="CA" data-continent="North America">
+<div class="country-header"><span class="flag">🇨🇦</span><div class="country-name"><h3>Канада</h3><span>CA &bull; Отава</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">C$ CAD</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+1</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">50.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">англиски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">CA02 0044 4753 0058 7830 92</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Мексико" data-code="MX" data-continent="North America">
+<div class="country-header"><span class="flag">🇲🇽</span><div class="country-name"><h3>Мексико</h3><span>MX &bull; Мексико Сити</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">$ MXN</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+52</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">10.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">шпански</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">MX12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Гватемала" data-code="GT" data-continent="North America">
+<div class="country-header"><span class="flag">🇬🇹</span><div class="country-name"><h3>Гватемала</h3><span>GT &bull; Гватемала</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">Q GTQ</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+502</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">2.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">шпански</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">GT12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Белизе" data-code="BZ" data-continent="North America">
+<div class="country-header"><span class="flag">🇧🇿</span><div class="country-name"><h3>Белизе</h3><span>BZ &bull; Белмопан</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">$ BZD</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+501</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">1.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">англиски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">BZ12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Ел Салвадор" data-code="SV" data-continent="North America">
+<div class="country-header"><span class="flag">🇸🇻</span><div class="country-name"><h3>Ел Салвадор</h3><span>SV &bull; Сан Салвадор</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">$ USD</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+503</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">3.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">шпански</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">SV12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Хондурас" data-code="HN" data-continent="North America">
+<div class="country-header"><span class="flag">🇭🇳</span><div class="country-name"><h3>Хондурас</h3><span>HN &bull; Тегусигалпа</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">L HNL</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+504</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">2.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">шпански</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">HN12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Никарагва" data-code="NI" data-continent="North America">
+<div class="country-header"><span class="flag">🇳🇮</span><div class="country-name"><h3>Никарагва</h3><span>NI &bull; Манагва</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">C$ NIO</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+505</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">2.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">шпански</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">NI12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Костарика" data-code="CR" data-continent="North America">
+<div class="country-header"><span class="flag">🇨🇷</span><div class="country-name"><h3>Костарика</h3><span>CR &bull; Сан Хосе</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">₡ CRC</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+506</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">3.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">шпански</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">CR12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Панама" data-code="PA" data-continent="North America">
+<div class="country-header"><span class="flag">🇵🇦</span><div class="country-name"><h3>Панама</h3><span>PA &bull; Панама</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">$ USD</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+507</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">5.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">шпански</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">PA12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Куба" data-code="CU" data-continent="North America">
+<div class="country-header"><span class="flag">🇨🇺</span><div class="country-name"><h3>Куба</h3><span>CU &bull; Хавана</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">$ CUP</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+53</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">500K</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">шпански</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">CU12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Јамајка" data-code="JM" data-continent="North America">
+<div class="country-header"><span class="flag">🇯🇲</span><div class="country-name"><h3>Јамајка</h3><span>JM &bull; Кингстон</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">$ JMD</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+1</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">3.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">англиски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">JM12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Хаити" data-code="HT" data-continent="North America">
+<div class="country-header"><span class="flag">🇭🇹</span><div class="country-name"><h3>Хаити</h3><span>HT &bull; Порт о Пренс</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">G HTG</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+509</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">500K</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">хаитски креолски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">HT12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Доминиканска Република" data-code="DO" data-continent="North America">
+<div class="country-header"><span class="flag">🇩🇴</span><div class="country-name"><h3>Доминиканска Република</h3><span>DO &bull; Санто Доминго</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">RD$ DOP</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+1</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">3.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">шпански</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">DO12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Тринидад и Тобаго" data-code="TT" data-continent="North America">
+<div class="country-header"><span class="flag">🇹🇹</span><div class="country-name"><h3>Тринидад и Тобаго</h3><span>TT &bull; Порт оф Спејн</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">$ TTD</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+1</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">3.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">англиски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">TT12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Барбадос" data-code="BB" data-continent="North America">
+<div class="country-header"><span class="flag">🇧🇧</span><div class="country-name"><h3>Барбадос</h3><span>BB &bull; Бриџтаун</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">$ BBD</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+1</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">3.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">англиски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">BB12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Бахами" data-code="BS" data-continent="North America">
+<div class="country-header"><span class="flag">🇧🇸</span><div class="country-name"><h3>Бахами</h3><span>BS &bull; Насау</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">$ BSD</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+1</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">5.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">англиски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">BS12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Антига и Барбуда" data-code="AG" data-continent="North America">
+<div class="country-header"><span class="flag">🇦🇬</span><div class="country-name"><h3>Антига и Барбуда</h3><span>AG &bull; Сент Џонс</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">$ XCD</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+1</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">3.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">англиски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">AG12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Доминика" data-code="DM" data-continent="North America">
+<div class="country-header"><span class="flag">🇩🇲</span><div class="country-name"><h3>Доминика</h3><span>DM &bull; Розо</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">$ XCD</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+1</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">2.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">англиски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">DM12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Гренада" data-code="GD" data-continent="North America">
+<div class="country-header"><span class="flag">🇬🇩</span><div class="country-name"><h3>Гренада</h3><span>GD &bull; Сент Џорџес</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">$ XCD</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+1</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">2.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">англиски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">GD12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Сент Китс и Невис" data-code="KN" data-continent="North America">
+<div class="country-header"><span class="flag">🇰🇳</span><div class="country-name"><h3>Сент Китс и Невис</h3><span>KN &bull; Бастер</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">$ XCD</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+1</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">3.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">англиски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">KN12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Сент Лусија" data-code="LC" data-continent="North America">
+<div class="country-header"><span class="flag">🇱🇨</span><div class="country-name"><h3>Сент Лусија</h3><span>LC &bull; Кастрис</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">$ XCD</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+1</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">2.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">англиски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">LC12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Сент Винсент и Гренадини" data-code="VC" data-continent="North America">
+<div class="country-header"><span class="flag">🇻🇨</span><div class="country-name"><h3>Сент Винсент и Гренадини</h3><span>VC &bull; Кингстаун</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">$ XCD</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+1</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">2.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">англиски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">VC12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+</div></div>
+<div class="continent-section" data-continent="South America">
+<div class="continent-header"><h2>Јужна Америка</h2><span class="continent-count">12 земји</span></div>
+<div class="countries-grid">
+<div class="country-card" data-name="Аргентина" data-code="AR" data-continent="South America">
+<div class="country-header"><span class="flag">🇦🇷</span><div class="country-name"><h3>Аргентина</h3><span>AR &bull; Буенос Аирес</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">$ ARS</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+54</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">5.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">шпански</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">AR12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Боливија" data-code="BO" data-continent="South America">
+<div class="country-header"><span class="flag">🇧🇴</span><div class="country-name"><h3>Боливија</h3><span>BO &bull; Сукре</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">Bs BOB</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+591</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">2.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">шпански</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">BO12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Бразил" data-code="BR" data-continent="South America">
+<div class="country-header"><span class="flag">🇧🇷</span><div class="country-name"><h3>Бразил</h3><span>BR &bull; Бразилија</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">R$ BRL</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+55</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">20.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">португалски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">BR12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Чиле" data-code="CL" data-continent="South America">
+<div class="country-header"><span class="flag">🇨🇱</span><div class="country-name"><h3>Чиле</h3><span>CL &bull; Сантијаго</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">$ CLP</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+56</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">10.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">шпански</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">CL12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Колумбија" data-code="CO" data-continent="South America">
+<div class="country-header"><span class="flag">🇨🇴</span><div class="country-name"><h3>Колумбија</h3><span>CO &bull; Богота</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">$ COP</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+57</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">10.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">шпански</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">CO12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Еквадор" data-code="EC" data-continent="South America">
+<div class="country-header"><span class="flag">🇪🇨</span><div class="country-name"><h3>Еквадор</h3><span>EC &bull; Кито</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">$ USD</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+593</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">5.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">шпански</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">EC12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Гвајана" data-code="GY" data-continent="South America">
+<div class="country-header"><span class="flag">🇬🇾</span><div class="country-name"><h3>Гвајана</h3><span>GY &bull; Џорџтаун</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">$ GYD</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+592</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">2.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">англиски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">GY12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Парагвај" data-code="PY" data-continent="South America">
+<div class="country-header"><span class="flag">🇵🇾</span><div class="country-name"><h3>Парагвај</h3><span>PY &bull; Асунсион</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">₲ PYG</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+595</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">3.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">шпански</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">PY12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Перу" data-code="PE" data-continent="South America">
+<div class="country-header"><span class="flag">🇵🇪</span><div class="country-name"><h3>Перу</h3><span>PE &bull; Лима</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">S/ PEN</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+51</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">10.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">шпански</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">PE12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Суринам" data-code="SR" data-continent="South America">
+<div class="country-header"><span class="flag">🇸🇷</span><div class="country-name"><h3>Суринам</h3><span>SR &bull; Парамарибо</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">$ SRD</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+597</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">2.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">холандски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">SR12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Уругвај" data-code="UY" data-continent="South America">
+<div class="country-header"><span class="flag">🇺🇾</span><div class="country-name"><h3>Уругвај</h3><span>UY &bull; Монтевидео</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">$ UYU</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+598</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">5.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">шпански</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">UY12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Венецуела" data-code="VE" data-continent="South America">
+<div class="country-header"><span class="flag">🇻🇪</span><div class="country-name"><h3>Венецуела</h3><span>VE &bull; Каракас</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">Bs VES</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+58</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">500K</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">шпански</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">VE12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+</div></div>
+<div class="continent-section" data-continent="Oceania">
+<div class="continent-header"><h2>Океанија</h2><span class="continent-count">14 земји</span></div>
+<div class="countries-grid">
+<div class="country-card" data-name="Австралија" data-code="AU" data-continent="Oceania">
+<div class="country-header"><span class="flag">🇦🇺</span><div class="country-name"><h3>Австралија</h3><span>AU &bull; Канбера</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">A$ AUD</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+61</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">50.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">англиски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">AU12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Нов Зеланд" data-code="NZ" data-continent="Oceania">
+<div class="country-header"><span class="flag">🇳🇿</span><div class="country-name"><h3>Нов Зеланд</h3><span>NZ &bull; Велингтон</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">NZ$ NZD</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+64</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">30.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">англиски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">NZ12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Фиџи" data-code="FJ" data-continent="Oceania">
+<div class="country-header"><span class="flag">🇫🇯</span><div class="country-name"><h3>Фиџи</h3><span>FJ &bull; Сува</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">$ FJD</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+679</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">3.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">англиски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">FJ12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Папуа Нова Гвинеја" data-code="PG" data-continent="Oceania">
+<div class="country-header"><span class="flag">🇵🇬</span><div class="country-name"><h3>Папуа Нова Гвинеја</h3><span>PG &bull; Порт Морзби</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">K PGK</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+675</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">2.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">англиски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">PG12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Соломонски Острови" data-code="SB" data-continent="Oceania">
+<div class="country-header"><span class="flag">🇸🇧</span><div class="country-name"><h3>Соломонски Острови</h3><span>SB &bull; Хонијара</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">$ SBD</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+677</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">1.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">англиски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">SB12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Вануату" data-code="VU" data-continent="Oceania">
+<div class="country-header"><span class="flag">🇻🇺</span><div class="country-name"><h3>Вануату</h3><span>VU &bull; Порт Вила</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">Vt VUV</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+678</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">1.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">бислама</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">VU12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Самоа" data-code="WS" data-continent="Oceania">
+<div class="country-header"><span class="flag">🇼🇸</span><div class="country-name"><h3>Самоа</h3><span>WS &bull; Апија</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">T WST</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+685</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">1.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">самоански</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">WS12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Тонга" data-code="TO" data-continent="Oceania">
+<div class="country-header"><span class="flag">🇹🇴</span><div class="country-name"><h3>Тонга</h3><span>TO &bull; Нукуалофа</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">T$ TOP</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+676</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">1.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">тонгански</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">TO12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Кирибати" data-code="KI" data-continent="Oceania">
+<div class="country-header"><span class="flag">🇰🇮</span><div class="country-name"><h3>Кирибати</h3><span>KI &bull; Тарава</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">A$ AUD</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+686</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">500K</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">кирибатски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">KI12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Тувалу" data-code="TV" data-continent="Oceania">
+<div class="country-header"><span class="flag">🇹🇻</span><div class="country-name"><h3>Тувалу</h3><span>TV &bull; Фунафути</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">A$ AUD</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+688</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">500K</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">тувалски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">TV12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Науру" data-code="NR" data-continent="Oceania">
+<div class="country-header"><span class="flag">🇳🇷</span><div class="country-name"><h3>Науру</h3><span>NR &bull; Јарен</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">A$ AUD</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+674</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">500K</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">наурски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">NR12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Маршалски Острови" data-code="MH" data-continent="Oceania">
+<div class="country-header"><span class="flag">🇲🇭</span><div class="country-name"><h3>Маршалски Острови</h3><span>MH &bull; Маџуро</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">$ USD</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+692</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">1.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">маршалски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">MH12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Палау" data-code="PW" data-continent="Oceania">
+<div class="country-header"><span class="flag">🇵🇼</span><div class="country-name"><h3>Палау</h3><span>PW &bull; Нгерулмуд</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">$ USD</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+680</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">1.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">палауански</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">PW12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+<div class="country-card" data-name="Микронезија" data-code="FM" data-continent="Oceania">
+<div class="country-header"><span class="flag">🇫🇲</span><div class="country-name"><h3>Микронезија</h3><span>FM &bull; Паликир</span></div></div>
+<div class="country-meta">
+<div class="meta-item"><span class="meta-label">Валута</span><span class="meta-value">$ USD</span></div>
+<div class="meta-item"><span class="meta-label">Телефон</span><span class="meta-value">+691</span></div>
+<div class="meta-item"><span class="meta-label">Макс. лимит</span><span class="meta-value">1.0M</span></div>
+<div class="meta-item"><span class="meta-label">Јазици</span><span class="meta-value" style="font-size:.8em">англиски</span></div>
+<div class="meta-item full-width"><span class="meta-label">IBAN</span><span class="meta-value" style="font-size:.75em;word-break:break-all">FM12 0000 1234 5678 9012 3456 7890</span></div>
+</div>
+</div>
+</div></div>
+</div>
+<div class="footer">
+  <h3>Makedon Transfer Money</h3>
+  <p>1000 Скопје, Северна Македонија | Dr. Sande Smiljanov</p>
+  <p style="margin-top:10px">Глобална платформа за трансфер на пари со 1% провизија | 195 земји | 7 континенти</p>
+</div>
+<script>
+let currentFilter = 'all';
+let currentSearch = '';
+
+function filterByContinent(cont, btn) {
+  currentFilter = cont;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  applyFilters();
+}
+
+function filterCountries() {
+  currentSearch = document.getElementById('searchInput').value.toLowerCase();
+  applyFilters();
+}
+
+function applyFilters() {
+  document.querySelectorAll('.continent-section').forEach(section => {
+    const cont = section.getAttribute('data-continent');
+    const matchContinent = currentFilter === 'all' || cont === currentFilter;
+    let visibleCount = 0;
+    section.querySelectorAll('.country-card').forEach(card => {
+      const name = card.getAttribute('data-name').toLowerCase();
+      const code = card.getAttribute('data-code').toLowerCase();
+      const matchSearch = currentSearch === '' || name.includes(currentSearch) || code.includes(currentSearch);
+      const show = matchContinent && matchSearch;
+      card.style.display = show ? '' : 'none';
+      if(show) visibleCount++;
+    });
+    section.style.display = (matchContinent && visibleCount > 0) ? '' : 'none';
+    const countEl = section.querySelector('.continent-count');
+    if(countEl) countEl.textContent = visibleCount + ' земји';
+  });
+}
+</script>
+</body>
+</html>
